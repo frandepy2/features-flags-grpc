@@ -203,6 +203,154 @@ func (x *FeatureRequest) GetEnv() string {
 	return ""
 }
 
+type FeatureQuery struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	App           string                 `protobuf:"bytes,1,opt,name=app,proto3" json:"app,omitempty"`
+	Env           string                 `protobuf:"bytes,2,opt,name=env,proto3" json:"env,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FeatureQuery) Reset() {
+	*x = FeatureQuery{}
+	mi := &file_proto_featureflags_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FeatureQuery) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FeatureQuery) ProtoMessage() {}
+
+func (x *FeatureQuery) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_featureflags_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FeatureQuery.ProtoReflect.Descriptor instead.
+func (*FeatureQuery) Descriptor() ([]byte, []int) {
+	return file_proto_featureflags_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *FeatureQuery) GetApp() string {
+	if x != nil {
+		return x.App
+	}
+	return ""
+}
+
+func (x *FeatureQuery) GetEnv() string {
+	if x != nil {
+		return x.Env
+	}
+	return ""
+}
+
+type FeatureEntry struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	FeatureKey    string                 `protobuf:"bytes,1,opt,name=feature_key,json=featureKey,proto3" json:"feature_key,omitempty"`
+	Value         *FeatureValue          `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FeatureEntry) Reset() {
+	*x = FeatureEntry{}
+	mi := &file_proto_featureflags_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FeatureEntry) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FeatureEntry) ProtoMessage() {}
+
+func (x *FeatureEntry) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_featureflags_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FeatureEntry.ProtoReflect.Descriptor instead.
+func (*FeatureEntry) Descriptor() ([]byte, []int) {
+	return file_proto_featureflags_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *FeatureEntry) GetFeatureKey() string {
+	if x != nil {
+		return x.FeatureKey
+	}
+	return ""
+}
+
+func (x *FeatureEntry) GetValue() *FeatureValue {
+	if x != nil {
+		return x.Value
+	}
+	return nil
+}
+
+type FeatureList struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Flags         []*FeatureEntry        `protobuf:"bytes,1,rep,name=flags,proto3" json:"flags,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FeatureList) Reset() {
+	*x = FeatureList{}
+	mi := &file_proto_featureflags_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FeatureList) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FeatureList) ProtoMessage() {}
+
+func (x *FeatureList) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_featureflags_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FeatureList.ProtoReflect.Descriptor instead.
+func (*FeatureList) Descriptor() ([]byte, []int) {
+	return file_proto_featureflags_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *FeatureList) GetFlags() []*FeatureEntry {
+	if x != nil {
+		return x.Flags
+	}
+	return nil
+}
+
 type FeatureResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Value         *FeatureValue          `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
@@ -212,7 +360,7 @@ type FeatureResponse struct {
 
 func (x *FeatureResponse) Reset() {
 	*x = FeatureResponse{}
-	mi := &file_proto_featureflags_proto_msgTypes[2]
+	mi := &file_proto_featureflags_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -224,7 +372,7 @@ func (x *FeatureResponse) String() string {
 func (*FeatureResponse) ProtoMessage() {}
 
 func (x *FeatureResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_featureflags_proto_msgTypes[2]
+	mi := &file_proto_featureflags_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -237,7 +385,7 @@ func (x *FeatureResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FeatureResponse.ProtoReflect.Descriptor instead.
 func (*FeatureResponse) Descriptor() ([]byte, []int) {
-	return file_proto_featureflags_proto_rawDescGZIP(), []int{2}
+	return file_proto_featureflags_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *FeatureResponse) GetValue() *FeatureValue {
@@ -259,7 +407,7 @@ type FeatureConfig struct {
 
 func (x *FeatureConfig) Reset() {
 	*x = FeatureConfig{}
-	mi := &file_proto_featureflags_proto_msgTypes[3]
+	mi := &file_proto_featureflags_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -271,7 +419,7 @@ func (x *FeatureConfig) String() string {
 func (*FeatureConfig) ProtoMessage() {}
 
 func (x *FeatureConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_featureflags_proto_msgTypes[3]
+	mi := &file_proto_featureflags_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -284,7 +432,7 @@ func (x *FeatureConfig) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FeatureConfig.ProtoReflect.Descriptor instead.
 func (*FeatureConfig) Descriptor() ([]byte, []int) {
-	return file_proto_featureflags_proto_rawDescGZIP(), []int{3}
+	return file_proto_featureflags_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *FeatureConfig) GetFeatureKey() string {
@@ -324,7 +472,7 @@ type FeatureAck struct {
 
 func (x *FeatureAck) Reset() {
 	*x = FeatureAck{}
-	mi := &file_proto_featureflags_proto_msgTypes[4]
+	mi := &file_proto_featureflags_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -336,7 +484,7 @@ func (x *FeatureAck) String() string {
 func (*FeatureAck) ProtoMessage() {}
 
 func (x *FeatureAck) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_featureflags_proto_msgTypes[4]
+	mi := &file_proto_featureflags_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -349,7 +497,7 @@ func (x *FeatureAck) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FeatureAck.ProtoReflect.Descriptor instead.
 func (*FeatureAck) Descriptor() ([]byte, []int) {
-	return file_proto_featureflags_proto_rawDescGZIP(), []int{4}
+	return file_proto_featureflags_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *FeatureAck) GetSuccess() bool {
@@ -377,7 +525,16 @@ const file_proto_featureflags_proto_rawDesc = "" +
 	"featureKey\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\tR\x06userId\x12\x10\n" +
 	"\x03app\x18\x03 \x01(\tR\x03app\x12\x10\n" +
-	"\x03env\x18\x04 \x01(\tR\x03env\"C\n" +
+	"\x03env\x18\x04 \x01(\tR\x03env\"2\n" +
+	"\fFeatureQuery\x12\x10\n" +
+	"\x03app\x18\x01 \x01(\tR\x03app\x12\x10\n" +
+	"\x03env\x18\x02 \x01(\tR\x03env\"a\n" +
+	"\fFeatureEntry\x12\x1f\n" +
+	"\vfeature_key\x18\x01 \x01(\tR\n" +
+	"featureKey\x120\n" +
+	"\x05value\x18\x02 \x01(\v2\x1a.featureflags.FeatureValueR\x05value\"?\n" +
+	"\vFeatureList\x120\n" +
+	"\x05flags\x18\x01 \x03(\v2\x1a.featureflags.FeatureEntryR\x05flags\"C\n" +
 	"\x0fFeatureResponse\x120\n" +
 	"\x05value\x18\x01 \x01(\v2\x1a.featureflags.FeatureValueR\x05value\"\x86\x01\n" +
 	"\rFeatureConfig\x12\x1f\n" +
@@ -388,12 +545,13 @@ const file_proto_featureflags_proto_rawDesc = "" +
 	"\x03env\x18\x04 \x01(\tR\x03env\"&\n" +
 	"\n" +
 	"FeatureAck\x12\x18\n" +
-	"\asuccess\x18\x01 \x01(\bR\asuccess2\xed\x01\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess2\xb1\x02\n" +
 	"\fFeatureFlags\x12I\n" +
 	"\n" +
 	"GetFeature\x12\x1c.featureflags.FeatureRequest\x1a\x1d.featureflags.FeatureResponse\x12C\n" +
 	"\n" +
-	"SetFeature\x12\x1b.featureflags.FeatureConfig\x1a\x18.featureflags.FeatureAck\x12M\n" +
+	"SetFeature\x12\x1b.featureflags.FeatureConfig\x1a\x18.featureflags.FeatureAck\x12B\n" +
+	"\tListFlags\x12\x1a.featureflags.FeatureQuery\x1a\x19.featureflags.FeatureList\x12M\n" +
 	"\fWatchFeature\x12\x1c.featureflags.FeatureRequest\x1a\x1d.featureflags.FeatureResponse0\x01B;Z9github.com/frandepy2/featureflags-grpc/proto;featureflagsb\x06proto3"
 
 var (
@@ -408,28 +566,35 @@ func file_proto_featureflags_proto_rawDescGZIP() []byte {
 	return file_proto_featureflags_proto_rawDescData
 }
 
-var file_proto_featureflags_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_proto_featureflags_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_proto_featureflags_proto_goTypes = []any{
 	(*FeatureValue)(nil),    // 0: featureflags.FeatureValue
 	(*FeatureRequest)(nil),  // 1: featureflags.FeatureRequest
-	(*FeatureResponse)(nil), // 2: featureflags.FeatureResponse
-	(*FeatureConfig)(nil),   // 3: featureflags.FeatureConfig
-	(*FeatureAck)(nil),      // 4: featureflags.FeatureAck
+	(*FeatureQuery)(nil),    // 2: featureflags.FeatureQuery
+	(*FeatureEntry)(nil),    // 3: featureflags.FeatureEntry
+	(*FeatureList)(nil),     // 4: featureflags.FeatureList
+	(*FeatureResponse)(nil), // 5: featureflags.FeatureResponse
+	(*FeatureConfig)(nil),   // 6: featureflags.FeatureConfig
+	(*FeatureAck)(nil),      // 7: featureflags.FeatureAck
 }
 var file_proto_featureflags_proto_depIdxs = []int32{
-	0, // 0: featureflags.FeatureResponse.value:type_name -> featureflags.FeatureValue
-	0, // 1: featureflags.FeatureConfig.value:type_name -> featureflags.FeatureValue
-	1, // 2: featureflags.FeatureFlags.GetFeature:input_type -> featureflags.FeatureRequest
-	3, // 3: featureflags.FeatureFlags.SetFeature:input_type -> featureflags.FeatureConfig
-	1, // 4: featureflags.FeatureFlags.WatchFeature:input_type -> featureflags.FeatureRequest
-	2, // 5: featureflags.FeatureFlags.GetFeature:output_type -> featureflags.FeatureResponse
-	4, // 6: featureflags.FeatureFlags.SetFeature:output_type -> featureflags.FeatureAck
-	2, // 7: featureflags.FeatureFlags.WatchFeature:output_type -> featureflags.FeatureResponse
-	5, // [5:8] is the sub-list for method output_type
-	2, // [2:5] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	0, // 0: featureflags.FeatureEntry.value:type_name -> featureflags.FeatureValue
+	3, // 1: featureflags.FeatureList.flags:type_name -> featureflags.FeatureEntry
+	0, // 2: featureflags.FeatureResponse.value:type_name -> featureflags.FeatureValue
+	0, // 3: featureflags.FeatureConfig.value:type_name -> featureflags.FeatureValue
+	1, // 4: featureflags.FeatureFlags.GetFeature:input_type -> featureflags.FeatureRequest
+	6, // 5: featureflags.FeatureFlags.SetFeature:input_type -> featureflags.FeatureConfig
+	2, // 6: featureflags.FeatureFlags.ListFlags:input_type -> featureflags.FeatureQuery
+	1, // 7: featureflags.FeatureFlags.WatchFeature:input_type -> featureflags.FeatureRequest
+	5, // 8: featureflags.FeatureFlags.GetFeature:output_type -> featureflags.FeatureResponse
+	7, // 9: featureflags.FeatureFlags.SetFeature:output_type -> featureflags.FeatureAck
+	4, // 10: featureflags.FeatureFlags.ListFlags:output_type -> featureflags.FeatureList
+	5, // 11: featureflags.FeatureFlags.WatchFeature:output_type -> featureflags.FeatureResponse
+	8, // [8:12] is the sub-list for method output_type
+	4, // [4:8] is the sub-list for method input_type
+	4, // [4:4] is the sub-list for extension type_name
+	4, // [4:4] is the sub-list for extension extendee
+	0, // [0:4] is the sub-list for field type_name
 }
 
 func init() { file_proto_featureflags_proto_init() }
@@ -449,7 +614,7 @@ func file_proto_featureflags_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_featureflags_proto_rawDesc), len(file_proto_featureflags_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   5,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

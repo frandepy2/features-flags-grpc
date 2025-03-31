@@ -3,14 +3,17 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/frandepy2/featureflags-grpc/internal/storage"
 	pb "github.com/frandepy2/featureflags-grpc/proto"
 	"github.com/redis/go-redis/v9"
+	"go.mongodb.org/mongo-driver/bson"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
@@ -235,6 +238,107 @@ func (s *featureFlagsServer) WatchFeature(req *pb.FeatureRequest, stream pb.Feat
 		stream.Send(resp)
 	}
 
+}
+func mapStoredToFeatureValue(stored struct {
+	Type  string `json:"type"`
+	Value string `json:"value"`
+}) *pb.FeatureValue {
+	switch stored.Type {
+	case "bool":
+		return &pb.FeatureValue{Value: &pb.FeatureValue_BoolValue{BoolValue: stored.Value == "1"}}
+	case "string":
+		return &pb.FeatureValue{Value: &pb.FeatureValue_StringValue{StringValue: stored.Value}}
+	case "int":
+		i, _ := strconv.Atoi(stored.Value)
+		return &pb.FeatureValue{Value: &pb.FeatureValue_IntValue{IntValue: int32(i)}}
+	case "json":
+		return &pb.FeatureValue{Value: &pb.FeatureValue_JsonValue{JsonValue: stored.Value}}
+	default:
+		return nil
+	}
+}
+
+func (s *featureFlagsServer) ListFlags(ctx context.Context, req *pb.FeatureQuery) (*pb.FeatureList, error) {
+	prefix := fmt.Sprintf("feature:%s:%s:", req.App, req.Env)
+
+	iter := s.redis.Client.Scan(ctx, 0, prefix+"*", 0).Iterator()
+	var entries []*pb.FeatureEntry
+
+	for iter.Next(ctx) {
+		key := iter.Val()
+		parts := strings.Split(key, ":")
+		if len(parts) < 4 {
+			continue
+		}
+		featureKey := parts[3]
+
+		val, err := s.redis.Client.Get(ctx, key).Result()
+		if err != nil {
+			continue
+		}
+
+		var stored struct {
+			Type  string `json:"type"`
+			Value string `json:"value"`
+		}
+		if err := json.Unmarshal([]byte(val), &stored); err != nil {
+			continue
+		}
+
+		entry := &pb.FeatureEntry{
+			FeatureKey: featureKey,
+			Value:      mapStoredToFeatureValue(stored),
+		}
+		entries = append(entries, entry)
+	}
+
+	// 🔍 Si Redis no tiene nada, consultamos Mongo
+	if len(entries) == 0 {
+		filter := bson.M{"feature_key": bson.M{"$regex": "^" + prefix}}
+		cursor, err := s.mongo.Collection.Find(ctx, filter)
+		if err != nil {
+			return nil, err
+		}
+		defer cursor.Close(ctx)
+
+		for cursor.Next(ctx) {
+			var doc struct {
+				FeatureKey  string            `bson:"feature_key"`
+				LastUpdated time.Time         `bson:"last_updated"`
+				Value       map[string]string `bson:"value"`
+			}
+			if err := cursor.Decode(&doc); err != nil {
+				continue
+			}
+			parts := strings.Split(doc.FeatureKey, ":")
+			if len(parts) < 4 {
+				continue
+			}
+			featureKey := parts[3]
+
+			stored := struct {
+				Type  string `json:"type"`
+				Value string `json:"value"`
+			}{
+				Type:  doc.Value["type"],
+				Value: doc.Value["value"],
+			}
+
+			entry := &pb.FeatureEntry{
+				FeatureKey: featureKey,
+				Value:      mapStoredToFeatureValue(stored),
+			}
+			entries = append(entries, entry)
+
+			payload, _ := json.Marshal(map[string]string{
+				"type":  stored.Type,
+				"value": stored.Value,
+			})
+			_ = s.redis.Client.Set(ctx, doc.FeatureKey, payload, 24*time.Hour).Err()
+		}
+	}
+
+	return &pb.FeatureList{Flags: entries}, nil
 }
 
 func main() {

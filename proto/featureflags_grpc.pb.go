@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion9
 const (
 	FeatureFlags_GetFeature_FullMethodName   = "/featureflags.FeatureFlags/GetFeature"
 	FeatureFlags_SetFeature_FullMethodName   = "/featureflags.FeatureFlags/SetFeature"
+	FeatureFlags_ListFlags_FullMethodName    = "/featureflags.FeatureFlags/ListFlags"
 	FeatureFlags_WatchFeature_FullMethodName = "/featureflags.FeatureFlags/WatchFeature"
 )
 
@@ -30,6 +31,7 @@ const (
 type FeatureFlagsClient interface {
 	GetFeature(ctx context.Context, in *FeatureRequest, opts ...grpc.CallOption) (*FeatureResponse, error)
 	SetFeature(ctx context.Context, in *FeatureConfig, opts ...grpc.CallOption) (*FeatureAck, error)
+	ListFlags(ctx context.Context, in *FeatureQuery, opts ...grpc.CallOption) (*FeatureList, error)
 	WatchFeature(ctx context.Context, in *FeatureRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[FeatureResponse], error)
 }
 
@@ -61,6 +63,16 @@ func (c *featureFlagsClient) SetFeature(ctx context.Context, in *FeatureConfig, 
 	return out, nil
 }
 
+func (c *featureFlagsClient) ListFlags(ctx context.Context, in *FeatureQuery, opts ...grpc.CallOption) (*FeatureList, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(FeatureList)
+	err := c.cc.Invoke(ctx, FeatureFlags_ListFlags_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *featureFlagsClient) WatchFeature(ctx context.Context, in *FeatureRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[FeatureResponse], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	stream, err := c.cc.NewStream(ctx, &FeatureFlags_ServiceDesc.Streams[0], FeatureFlags_WatchFeature_FullMethodName, cOpts...)
@@ -86,6 +98,7 @@ type FeatureFlags_WatchFeatureClient = grpc.ServerStreamingClient[FeatureRespons
 type FeatureFlagsServer interface {
 	GetFeature(context.Context, *FeatureRequest) (*FeatureResponse, error)
 	SetFeature(context.Context, *FeatureConfig) (*FeatureAck, error)
+	ListFlags(context.Context, *FeatureQuery) (*FeatureList, error)
 	WatchFeature(*FeatureRequest, grpc.ServerStreamingServer[FeatureResponse]) error
 	mustEmbedUnimplementedFeatureFlagsServer()
 }
@@ -102,6 +115,9 @@ func (UnimplementedFeatureFlagsServer) GetFeature(context.Context, *FeatureReque
 }
 func (UnimplementedFeatureFlagsServer) SetFeature(context.Context, *FeatureConfig) (*FeatureAck, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetFeature not implemented")
+}
+func (UnimplementedFeatureFlagsServer) ListFlags(context.Context, *FeatureQuery) (*FeatureList, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListFlags not implemented")
 }
 func (UnimplementedFeatureFlagsServer) WatchFeature(*FeatureRequest, grpc.ServerStreamingServer[FeatureResponse]) error {
 	return status.Errorf(codes.Unimplemented, "method WatchFeature not implemented")
@@ -163,6 +179,24 @@ func _FeatureFlags_SetFeature_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _FeatureFlags_ListFlags_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FeatureQuery)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FeatureFlagsServer).ListFlags(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FeatureFlags_ListFlags_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FeatureFlagsServer).ListFlags(ctx, req.(*FeatureQuery))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _FeatureFlags_WatchFeature_Handler(srv interface{}, stream grpc.ServerStream) error {
 	m := new(FeatureRequest)
 	if err := stream.RecvMsg(m); err != nil {
@@ -188,6 +222,10 @@ var FeatureFlags_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SetFeature",
 			Handler:    _FeatureFlags_SetFeature_Handler,
+		},
+		{
+			MethodName: "ListFlags",
+			Handler:    _FeatureFlags_ListFlags_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{
