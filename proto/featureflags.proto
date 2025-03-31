@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package featureflags;
+
+option go_package = "github.com/frandepy2/featureflags-grpc/proto;featureflags";
+
+service FeatureFlags {
+  rpc GetFeature (FeatureRequest) returns (FeatureResponse);
+  rpc SetFeature (FeatureConfig) returns (FeatureAck);
+
+  rpc WatchFeature (FeatureRequest) returns (stream FeatureResponse);
+}
+
+
+message FeatureValue {
+  oneof value {
+    bool bool_value = 1;
+    string string_value = 2;
+    int32 int_value = 3;
+    string json_value = 4;
+  }
+}
+
+message FeatureRequest {
+  string feature_key = 1;
+  string user_id = 2;
+  string app = 3;
+  string env = 4;
+}
+
+message FeatureResponse {
+  FeatureValue value = 1;
+}
+
+message FeatureConfig {
+  string feature_key = 1;
+  FeatureValue value = 2;
+  string app = 3;
+  string env = 4;
+}
+
+message FeatureAck {
+  bool success = 1;
+}
+

@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: feature_flags_db
+    volumes:
+      - mongodb_data:/data/db
+
+  featureflags:
+    build: .
+    container_name: featureflags
+    ports:
+      - "50051:50051"
+    depends_on:
+      - mongodb
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017/feature_flags_db
+      - REDIS_URL=redis://redis:6379
+    volumes:
+      - .:/app
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+
+volumes:
+  mongodb_data:
